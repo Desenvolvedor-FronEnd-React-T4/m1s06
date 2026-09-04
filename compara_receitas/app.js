@@ -47,7 +47,7 @@ const receitasSobremesa = [
     chillTime: 120,
   },
   {
-    name: "Sorvete",
+    name: "Sorvete de Morango",
     ingredients: ["leite", "açúcar", "ovo", "morango"],
     minutes: 30,
     chillTime: 60,
@@ -57,6 +57,12 @@ const receitasSobremesa = [
     ingredients: ["farinha", "açúcar", "ovo", "chocolate", "manteiga"],
     minutes: 45,
     chillTime: 30,
+  },
+  {
+    name: "Sorvete de Manga",
+    ingredients: ["leite", "açúcar", "ovo", "manga"],
+    minutes: "30;",
+    chillTime: 60,
   },
 ];
 
@@ -124,9 +130,18 @@ class ReceitaSobremesa extends Receita {
   }
 
   tempoTotal() {
-    console.log(
-      `Tempo total da receita: ${this.tempoPreparoMin + this.tempoDescansoMin}min.`,
-    );
+    if (
+      Number.isNaN(this.tempoPreparoMin) ||
+      Number.isNaN(this.tempoDescansoMin)
+    ) {
+      console.log(
+        `Ocorreu um problema ao carregar o tempo total da receita de ${this.nome}.`,
+      );
+    } else {
+      console.log(
+        `Tempo total da receita: ${this.tempoPreparoMin + this.tempoDescansoMin}min.`,
+      );
+    }
   }
 }
 
@@ -165,7 +180,7 @@ async function main() {
       return new Receita(
         objResponse.nome,
         objResponse.ingredientes,
-        objResponse.minutos,
+        Number(objResponse.minutos),
       );
     });
 
@@ -176,8 +191,8 @@ async function main() {
         return new ReceitaSobremesa(
           objResponse.name,
           objResponse.ingredients,
-          objResponse.minutes,
-          objResponse.chillTime,
+          Number(objResponse.minutes),
+          Number(objResponse.chillTime),
         );
       },
     );
